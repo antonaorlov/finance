@@ -1,0 +1,71 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Home page for summary
+{% endblock %}
+
+
+{% block main %}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+        <th>Symbol</th>
+        <th>Name</th>
+        <th>Shares</th>
+        <th>Price</th>
+        <th>PIP</th>
+        <th>Buy</th>
+        <th>Sell</th>
+        <th>Total</th>
+        </tr>
+    </thead>
+
+
+    <tbody>
+        {% for stockss in stock: %}
+            <tr>
+            <td>{{ stockss.symbol }}</td>
+            <td>{{ stocks[stockss.symbol]["name"] }}</td>
+            <td>{{ stockss.total_shares }}</td>
+            <td>{{ stocks[stockss.symbol]["price"]  }}</td>
+            <td>{{ ((stocks[stockss.symbol]["price"] - stocks[stockss.symbol]["open"]) / stocks[stockss.symbol]["open"] ) | prs}}</td>
+             <td>
+                <form action ="/buy" method="post">
+                <input type="hidden" name="symbol" value="{{ stockss.symbol }}"/>
+                <input type="number" name="shares" min="1"  placeholder="0" style="width: 50px" required>
+                <button class ="btn btn-sm btn-success" type="submit">Buy</button>
+                </form>
+            </td>
+            <td>
+                <form action ="/sell" method="post">
+                <input type="hidden" name="symbol" value="{{ stockss.symbol }}"/>
+                <input type="number" name="shares" min="1" max="{{ stockss.total_shares }}"  placeholder="0" style="width: 50px" required>
+                <button class ="btn btn-sm btn-danger" type="submit">Sell</button>
+                </form>
+            </td>
+            <td> {{ (stocks[stockss.symbol]["price"] * stockss.total_shares) | usd }}</td>
+            </tr>
+        {% endfor %}
+
+
+    </tbody>
+
+    <tfoot>
+        <tr>
+        <td style="text-align:left;" colspan="7">Cash Remaining</td>
+        <td>{{ cashremain | usd }}</td>
+        </tr>
+
+        <tr>
+        <td colspan="7"></td>
+        <td><b>{{ (cashremain + total_asset) | usd  }}</b></td>
+        </tr>
+
+    </tfoot>
+
+</table>
+
+
+{% endblock %}
+

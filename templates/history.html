@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %}
+   History
+{% endblock %}
+
+{% block main %}
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Shares</th>
+                <th>Price</th>
+                <th>Transacted</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for register in rows %}
+                <tr>
+                    <td>{{ register.symbol }}</td>
+                    <td>{{ register.shares }}</td>
+                    <td>{{ (register.shares * register.price) | abs | usd }}</td>
+                    <td>{{ register.time }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
